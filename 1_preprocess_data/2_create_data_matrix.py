@@ -148,7 +148,6 @@ def get_all_unnormalized_data_this_session(eid):
 def calculate_condition_number(inpt):
     full_inpt = np.hstack((inpt, np.ones((inpt.shape[0], 1))))
     condition_number = LA.cond(full_inpt)
-    print("Condition number of input matrix = " + str(condition_number))
     return condition_number
 
 def load_animal_list(file):
@@ -165,12 +164,9 @@ def load_animal_eid_dict(file):
 def create_train_test_sessions(session, num_folds = 5):
     # create a session-fold lookup table
     num_sessions = len(np.unique(session))
-    print("number of sessions = " + str(num_sessions))
     # Map sessions to folds:
     unshuffled_folds = np.repeat(np.arange(num_folds), np.ceil(num_sessions/num_folds))
     shuffled_folds = npr.permutation(unshuffled_folds)[:num_sessions]
-    print(shuffled_folds)
-    print(np.unique(shuffled_folds, return_counts=True))
     assert len(np.unique(shuffled_folds)) == 5, "require at least one session per fold for each animal!"
     # Look up table of shuffle-folds:
     sess_id = np.array(np.unique(session), dtype='str')
@@ -189,7 +185,6 @@ if __name__ == '__main__':
     #animal_list = ['CSHL_008']
     # Load animal-eid dict (keys are animals and vals are list of eids for biased block sessions)
     animal_eid_dict = load_animal_eid_dict('partially_processed/animal_eid_dict.json')
-    print(animal_eid_dict)
 
     # Require that each animal has at least 30 sessions (=2700 trials) of data:
     req_num_sessions = 30 #30*90 = 2700
@@ -252,14 +247,9 @@ if __name__ == '__main__':
     assert np.shape(master_rewarded)[0] == np.shape(master_y)[0], "rewarded and y not same length"
     assert len(np.unique(master_session)) == np.shape(master_session_fold_lookup_table)[
         0], "number of unique sessions and session fold lookup don't match"
-    print(master_inpt.shape)
-    print("len list" + str(len(animal_list)))
     normalized_inpt = np.copy(master_inpt)
     normalized_inpt[:,0] = preprocessing.scale(normalized_inpt[:,0])
     calculate_condition_number(preprocessing.scale(normalized_inpt))
-    print(np.unique(normalized_inpt[:, 0], return_counts=True))
-    print(np.unique(normalized_inpt[:, 1], return_counts=True))
-    print(np.unique(normalized_inpt[:, 2], return_counts=True))
     np.savez(data_dir + 'all_animals_concat' + '.npz', normalized_inpt, master_y, master_session)
     np.savez(data_dir + 'all_animals_concat_unnormalized' + '.npz', master_inpt, master_y, master_session)
     np.savez(data_dir + 'all_animals_concat_session_fold_lookup' + '.npz', master_session_fold_lookup_table)
@@ -277,9 +267,6 @@ if __name__ == '__main__':
         start_idx = animal_start_idx[animal]
         end_idx = animal_end_idx[animal]
         inpt = normalized_inpt[range(start_idx, end_idx + 1)]
-        print(np.unique(inpt[:, 0]))
-        print(np.unique(inpt[:, 1]))
-        print(np.unique(inpt[:, 2]))
         y = master_y[range(start_idx, end_idx + 1)]
         session = master_session[range(start_idx, end_idx + 1)]
         counter += inpt.shape[0]
