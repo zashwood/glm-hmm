@@ -1,0 +1,21 @@
+name: glmhmm
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - pip==21.3.1
+  - python==3.7.6
+  - pip:
+    - setuptools==60.2.0 # necessary for ibllib installation
+    - wheel==0.37.1 # necessary for ibllib installation
+    - opencv-python==3.4.13.47 # necessary for ibllib installation
+    - ibllib==1.4.14
+    - matplotlib==3.1.3
+    - numba==0.48.0
+    - numpy==1.18.1
+    - pandas==1.0.1
+    - pytest==6.2.5
+    - scikit-learn==0.22.1
+    - scipy==1.4.1
+    - seaborn==0.10.0
+    - wget==3.2
