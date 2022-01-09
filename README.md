@@ -46,8 +46,7 @@ Note: this may take a while as ibllib relies on OpenCV, and installing
 We use version 0.0.1 of the Bayesian State Space Modeling framework from
  Scott Linderman's lab to perform GLM-HMM inference.  Within the `glmhmm` environment, install the forked version of the `ssm` package available at
   `https://github.com/zashwood/ssm`.  This is a lightly modified version of the
-  master branch of the ssm package available at `https://github.com
-  /lindermanlab/ssm`.  It is modified so as to handle violation trials as
+  master branch of the ssm package available at `https://github.com/lindermanlab/ssm`.  It is modified so as to handle violation trials as
    described in Section 4 of our manuscript.  In order to install this
     version of `ssm`, follow the instructions provided there, namely: 
     
