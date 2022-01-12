@@ -28,8 +28,9 @@ Assuming that you have downloaded and preprocessed the datasets, and that you
  have fit all models on these datasets,  you can reproduce the figures of our
   paper corresponding to the IBL dataset by
    running the code contained in "3_make_figures".  In order to produce
-    Figures 5 and 7, simply replace the IBL URL in the preprocessing pipeline
-     scripts, with the URLs for the [Odoemene et al. (2018)](https://doi.org/10.14224/1.38944) and [Urai et al. (2017)](https://doi.org/10.6084/m9.figshare.4300043) datasets.
+    Figures 5 and 7, replace the IBL URL in the preprocessing pipeline
+     scripts, with the URLs for the [Odoemene et al. (2018)](https://doi.org/10.14224/1.38944) and [Urai et al. (2017)](https://doi.org/10.6084/m9.figshare.4300043) datasets, and rerun the GLM, lapse and GLM-HMM models
+      on these datasets before running the provided figure plotting code.
 
 
 Before beginning, create a conda environment from the environment yaml file by running 
@@ -44,9 +45,13 @@ Note: this may take a while as ibllib relies on OpenCV, and installing
 ```
 
 We use version 0.0.1 of the Bayesian State Space Modeling framework from
- Scott Linderman's lab to perform GLM-HMM inference.  Within the `glmhmm` environment, install the forked version of the `ssm` package available at
-  `https://github.com/zashwood/ssm`.  This is a lightly modified version of the
-  master branch of the ssm package available at `https://github.com/lindermanlab/ssm`.  It is modified so as to handle violation trials as
+ Scott Linderman's lab to perform GLM-HMM inference.  Within the `glmhmm
+ ` environment, install the forked version of the `ssm` package available 
+  [here](https://github.com/zashwood/ssm).  This is a lightly modified
+   version of
+   the
+  master branch of the ssm package available at [https://github.com
+  /lindermanlab/ssm](https://github.com/lindermanlab/ssm).  It is modified so as to handle violation trials as
    described in Section 4 of our manuscript.  In order to install this
     version of `ssm`, follow the instructions provided there, namely: 
     

@@ -72,6 +72,14 @@ def load_correct_incorrect_mat(file):
     return correct_mat, num_trials
 
 
+def load_rts(file):
+    container = np.load(file, allow_pickle=True)
+    data = [container[key] for key in container]
+    rt_dta = data[0]
+    rt_session = data[1]
+    return rt_dta, rt_session
+
+
 def get_file_name_for_best_model_fold(cvbt_folds_model, K, overall_dir,
                                       best_init_cvbt_dict):
     '''
@@ -87,8 +95,7 @@ def get_file_name_for_best_model_fold(cvbt_folds_model, K, overall_dir,
     # loc_best = K - 1
     loc_best = 0
     best_fold = np.where(cvbt_folds_model[loc_best, :] == max(cvbt_folds_model[
-                                                              loc_best, :]))[
-        0][0]
+        loc_best, :]))[0][0]
     base_path = overall_dir + '/GLM_HMM_K_' + str(K) + '/fold_' + str(
         best_fold)
     key_for_dict = '/GLM_HMM_K_' + str(K) + '/fold_' + str(best_fold)
@@ -98,16 +105,19 @@ def get_file_name_for_best_model_fold(cvbt_folds_model, K, overall_dir,
     return raw_file
 
 
-def create_train_test_trials_for_pred_acc(y, num_folds = 5):
+def create_train_test_trials_for_pred_acc(y, num_folds=5):
     # only select trials that are not violation trials for prediction:
-    num_trials = len(np.where(y[:,0]!= -1)[0])
+    num_trials = len(np.where(y[:, 0] != -1)[0])
     # Map sessions to folds:
-    unshuffled_folds = np.repeat(np.arange(num_folds), np.ceil(num_trials/num_folds))
+    unshuffled_folds = np.repeat(np.arange(num_folds),
+                                 np.ceil(num_trials / num_folds))
     shuffled_folds = npr.permutation(unshuffled_folds)[:num_trials]
-    assert len(np.unique(shuffled_folds)) == 5, "require at least one session per fold for each animal!"
+    assert len(np.unique(shuffled_folds)
+               ) == 5, "require at least one session per fold for each animal!"
     # Look up table of shuffle-folds:
-    shuffled_folds = np.array(shuffled_folds, dtype = 'O')
-    trial_fold_lookup_table = np.transpose(np.vstack([np.where(y[:,0]!= -1), shuffled_folds]))
+    shuffled_folds = np.array(shuffled_folds, dtype='O')
+    trial_fold_lookup_table = np.transpose(
+        np.vstack([np.where(y[:, 0] != -1), shuffled_folds]))
     return trial_fold_lookup_table
 
 
@@ -379,6 +389,7 @@ def check_all_indices_present(permutation, K):
             return False
     return True
 
+
 def get_global_weights(global_directory, K):
     cv_file = global_directory + "/cvbt_folds_model.npz"
     cvbt_folds_model = load_cv_arr(cv_file)
@@ -428,8 +439,7 @@ def get_was_correct(this_inpt, this_y):
     was_correct[:] = np.NaN
     idx_easy = np.where(np.abs(this_inpt[:, 0]) > 0.002)
     correct_side = (np.sign(this_inpt[idx_easy, 0]) + 1) / 2
-    was_correct[idx_easy] = (correct_side == this_y[
-        idx_easy, 0]) + 0
+    was_correct[idx_easy] = (correct_side == this_y[idx_easy, 0]) + 0
     return was_correct, idx_easy
 
 
