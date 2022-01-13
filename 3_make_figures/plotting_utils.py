@@ -1,4 +1,5 @@
 import json
+
 import numpy as np
 import numpy.random as npr
 import ssm
@@ -80,6 +81,14 @@ def load_rts(file):
     return rt_dta, rt_session
 
 
+def read_bootstrapped_median(file):
+    container = np.load(file, allow_pickle=True)
+    data = [container[key] for key in container]
+    median, lower, upper, mean_viol_rate_dist = data[0], data[1], data[2], \
+                                                data[3]
+    return median, lower, upper, mean_viol_rate_dist
+
+
 def get_file_name_for_best_model_fold(cvbt_folds_model, K, overall_dir,
                                       best_init_cvbt_dict):
     '''
@@ -134,6 +143,7 @@ def create_violation_mask(violation_idx, T):
     mask = mask + 0
     assert len(nonviolation_idx) + len(
         violation_idx) == T, "violation and non-violation idx do not include " \
+                             "" \
                              "" \
                              "" \
                              "" \
@@ -461,3 +471,25 @@ def find_change_points(states_max_posterior):
             change_points.append(idx_change_points)
     assert len(change_points) == num_sess
     return change_points
+
+
+def perform_bootstrap_individual_animal(rt_eng_vec,
+                                        rt_dis_vec,
+                                        data_quantile,
+                                        quantile=0.9):
+    distribution = []
+    for b in range(5000):
+        # Resample points with replacement
+        sample_eng = np.random.choice(rt_eng_vec, len(rt_eng_vec))
+        # Get sample quantile
+        sample_eng_quantile = np.quantile(sample_eng, quantile)
+        sample_dis = np.random.choice(rt_dis_vec, len(rt_dis_vec))
+        sample_dis_quantile = np.quantile(sample_dis, quantile)
+        distribution.append(sample_dis_quantile - sample_eng_quantile)
+    # Now return 2.5 and 97.5
+    max_val = np.max(distribution)
+    min_val = np.min(distribution)
+    lower = np.quantile(distribution, 0.025)
+    upper = np.quantile(distribution, 0.975)
+    frac_above_true = np.sum(distribution >= data_quantile) / len(distribution)
+    return lower, upper, min_val, max_val, frac_above_true
