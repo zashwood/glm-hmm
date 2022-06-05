@@ -17,11 +17,11 @@ Code is ordered so that the IBL dataset discussed in the paper is
       the code contained in "2_fit_models".  As discussed in the paper, the
        GLM should be run first as the GLM fit is used to initialize the
         global GLM-HMM (the model that is fit with data from all animals).  The
+           lapse model fits, while not used for any initialization purposes, should be run next so as to be able to perform model comparison with the global and individual GLM-HMMs. The
          global GLM-HMM should be run next, as it is used to initialize the
           models for all individual animals.  Finally GLM-HMMs can
            be fit to the data from individual animals using the code in the
-            associated directory. The
-           lapse model is not used for any initialization purposes, but so as to run the model comparison code, should be fit after the GLM code.
+            associated directory. 
           
 Assuming that you have downloaded and preprocessed the datasets, and that you
  have fit all models on these datasets,  you can reproduce the figures of our
