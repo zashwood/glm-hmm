@@ -21,8 +21,7 @@ Code is ordered so that the IBL dataset discussed in the paper is
           models for all individual animals.  Finally GLM-HMMs can
            be fit to the data from individual animals using the code in the
             associated directory. The
-           lapse model can be fit at
-           any time.
+           lapse model is not used for any initialization purposes, but so as to run the model comparison code, should be fit after the GLM code.
           
 Assuming that you have downloaded and preprocessed the datasets, and that you
  have fit all models on these datasets,  you can reproduce the figures of our
