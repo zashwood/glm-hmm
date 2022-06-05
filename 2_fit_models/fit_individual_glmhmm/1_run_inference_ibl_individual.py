@@ -63,7 +63,7 @@ if __name__ == '__main__':
                                                        inpt.shape[0])
 
         init_param_file = global_data_dir + \
-                          'best_params/best_params_K_' + \
+                          'best_global_params/best_params_K_' + \
                                 str(K) + '.npz'
 
         # create save directory for this initialization/fold combination:
